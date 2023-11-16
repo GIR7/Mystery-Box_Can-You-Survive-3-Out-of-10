@@ -1,0 +1,11 @@
+[package]
+name = "Mystery-Box_Can-You-Survive-3-Out-of-10"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ggez = "0.5"
+nalgebra = "0.29"
+rand = "0.8"
