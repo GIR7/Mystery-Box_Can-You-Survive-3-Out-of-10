@@ -1,6 +1,5 @@
 use std::time::Instant;
 use mint::Point2;
-
 use ggez::event::KeyCode;
 
 // Define the game state
@@ -18,40 +17,28 @@ impl GameState {
             player_health: 100,
             opened_boxes: 0,
             game_start_time: Instant::now(),
-            player_position: Point2 { x: 300.0, y: 200.0 },
+            player_position: Point2 { x: 300.0, y: 550.0 },
         }
     }
 }
 
 // Define the game window
+
 pub struct GameWindow {
     pub game_state: GameState,
 }
 
 impl GameWindow {
-    pub fn new(game_state: GameState) -> Self {
-        GameWindow { game_state }
+    pub fn new() -> Self {
+        GameWindow {
+            game_state: GameState::new(),
+        }
     }
-
      pub fn render(&self, ctx: &mut ggez::Context) -> ggez::GameResult {
         // Clear the screen
         ggez::graphics::clear(ctx, ggez::graphics::Color::BLACK);
 
         // Render player position
-        // let player_rect = ggez::graphics::Rect::new(
-        //     self.game_state.player_position.x,
-        //     self.game_state.player_position.y,
-        //     20.0, // Replace with your player width
-        //     30.0, // Replace with your player height
-        // );
-        // let player_color = ggez::graphics::Color::WHITE;
-        // let player_mesh = ggez::graphics::Mesh::new_rectangle(
-        //     ctx,
-        //     ggez::graphics::DrawMode::fill(),
-        //     player_rect,
-        //     player_color,
-        // )?;
-        // ggez::graphics::draw(ctx, &player_mesh, ggez::graphics::DrawParam::default())?;
         let player_rect = ggez::graphics::Mesh::new_rectangle(
             ctx,
             ggez::graphics::DrawMode::fill(),
@@ -84,8 +71,7 @@ impl GameWindow {
 }
 
 pub fn handle_input(game_state: &mut GameState, ctx: &mut ggez::Context) {
-        let speed = 5.0; // Adjust as needed
-
+        let speed = 5.0; 
         // Check keyboard input
         if ggez::input::keyboard::is_key_pressed(ctx, KeyCode::Up) {
             game_state.player_position.y -= speed;
