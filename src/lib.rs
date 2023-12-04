@@ -34,11 +34,29 @@ impl GameState {
         let mut boxes = Vec::new();
 
         // Generate 10 boxes with random positions
+        //fixed the boxes over-lapped issue
         for _ in 0..10 {
-            let box_position = Point2 {
-                x: rng.gen_range(0.0..800.0),
-                y: rng.gen_range(0.0..600.0),
-            };
+            let mut box_position;
+            loop {
+                // Generate a potential box position
+                box_position = Point2 {
+                    x: rng.gen_range(0.0..800.0),
+                    y: rng.gen_range(0.0..600.0),
+                };
+
+                // Check if the potential position collides with any existing box
+                let collides = boxes.iter().any(|existing_box:&GameBox| {
+                    (box_position.x + 30.0 > existing_box.position.x)
+                        && (existing_box.position.x + 30.0 > box_position.x)
+                        && (box_position.y + 30.0 > existing_box.position.y)
+                        && (existing_box.position.y + 30.0 > box_position.y)
+                });
+
+                if !collides {
+                    break; // Break the loop if the position doesn't collide with any existing box
+                }
+            }
+
             let box_effect = if rng.gen::<f32>() < 0.5 {
                 BoxEffect::Good
             } else {
@@ -50,6 +68,8 @@ impl GameState {
                 opened: false,
             });
         }
+
+
         GameState {
             player_health: 100,
             opened_boxes: 0,
