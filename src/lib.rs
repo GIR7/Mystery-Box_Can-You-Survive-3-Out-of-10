@@ -16,8 +16,9 @@ pub struct GameState {
 // Define the effect of opening a box
 #[derive(Clone, Copy)]
 pub enum BoxEffect {
-    Good,
-    Bad,
+    Cure(i32),
+    Injury(i32),
+    NoEffect,
 }
 
 // Define the box struct
@@ -57,11 +58,12 @@ impl GameState {
                 }
             }
 
-            let box_effect = if rng.gen::<f32>() < 0.5 {
-                BoxEffect::Good
-            } else {
-                BoxEffect::Bad
+            let box_effect = match rng.gen_range(0..2) {
+                0 => BoxEffect::Cure(rng.gen_range(5..50)), // Add between 5 and 50 points
+                1 => BoxEffect::Injury(rng.gen_range(50..100)),    // Deduct between 50 and 100 points
+                _ => BoxEffect::NoEffect,//nothing happen
             };
+
             boxes.push(GameBox {
                 position: box_position,
                 effect: box_effect,
@@ -125,10 +127,7 @@ impl GameWindow {
         // Render boxes
         for box_entity in &self.game_state.boxes {
             if !box_entity.opened{
-            let box_color = match box_entity.effect {
-                BoxEffect::Good => ggez::graphics::Color::GREEN,
-                BoxEffect::Bad => ggez::graphics::Color::RED,
-            };
+            let box_color = ggez::graphics::Color::GREEN;
 
             let box_rect = ggez::graphics::Mesh::new_rectangle(
                 ctx,
@@ -170,8 +169,16 @@ pub fn handle_input(game_state: &mut GameState, ctx: &mut ggez::Context) {
             if ggez::input::keyboard::is_key_pressed(ctx, KeyCode::Space) {
                 // Open the box and apply its effect to player health
                 match box_entity.effect {
-                    BoxEffect::Good => game_state.player_health += 10,
-                    BoxEffect::Bad => game_state.player_health -= 10,
+                    BoxEffect::Injury(points) => game_state.player_health =std::cmp::max(
+                        game_state.player_health - points,
+                        0,
+                    ), 
+                    // Ensure health doesn't exceed 100
+                    BoxEffect::Cure(points) => game_state.player_health = std::cmp::min(
+                        game_state.player_health + points,
+                        100,
+                    ), 
+                    BoxEffect::NoEffect => (),
                 }
                 game_state.opened_boxes += 1;
                 box_entity.opened = true; // Set the opened flag to true
