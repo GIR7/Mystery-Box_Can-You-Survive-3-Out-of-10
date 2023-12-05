@@ -140,30 +140,39 @@ impl GameWindow {
             self.game_state.opened_boxes,
             self.game_state.game_start_time.elapsed()
         ));
-        // Draw the text in the center of the screen
+        // Draw the text on the screen
         let text_dest = ggez::graphics::DrawParam::new()
             .dest(Point2 { x:15.0, y: 10.0 })
             .color(ggez::graphics::Color::BLACK);
         ggez::graphics::draw(ctx, &text, text_dest)?;
 
-        // Render boxes
-        for box_entity in &self.game_state.boxes {
-            if !box_entity.opened{
-            let box_color = ggez::graphics::Color::GREEN;
+        // Calculate the player's field of view rectangle
+        let fov_rect = ggez::graphics::Rect::new(
+            self.game_state.player_position.x - 100.0, // Adjust the width of the FOV rectangle
+            self.game_state.player_position.y - 100.0, // Adjust the height of the FOV rectangle
+            200.0, // Width of the FOV rectangle
+            200.0, // Height of the FOV rectangle
+        );
 
-            let box_rect = ggez::graphics::Mesh::new_rectangle(
-                ctx,
-                ggez::graphics::DrawMode::fill(),
-                ggez::graphics::Rect::new(
-                    box_entity.position.x,
-                    box_entity.position.y,
-                    30.0,
-                    30.0,
-                ),
-                box_color,
-            )?;
-            ggez::graphics::draw(ctx, &box_rect, ggez::graphics::DrawParam::default())?;
-        }
+        // Iterate over the boxes and render only those within the FOV
+        for box_entity in &self.game_state.boxes {
+            if !box_entity.opened && fov_rect.contains(box_entity.position) {
+                // Box is within the FOV and not opened, render it
+                let box_color = ggez::graphics::Color::GREEN;
+
+                let box_rect = ggez::graphics::Mesh::new_rectangle(
+                    ctx,
+                    ggez::graphics::DrawMode::fill(),
+                    ggez::graphics::Rect::new(
+                        box_entity.position.x,
+                        box_entity.position.y,
+                        30.0,
+                        30.0,
+                    ),
+                    box_color,
+                )?;
+                ggez::graphics::draw(ctx, &box_rect, ggez::graphics::DrawParam::default())?;
+            }
         }
 
         // Present the frame
