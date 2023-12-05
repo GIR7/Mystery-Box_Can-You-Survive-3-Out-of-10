@@ -182,10 +182,13 @@ impl GameWindow {
 }
 
 pub fn handle_input(game_state: &mut GameState, ctx: &mut ggez::Context) {
-        let speed = 5.0; 
+        let speed = 1.0; 
         // Check keyboard input
         if ggez::input::keyboard::is_key_pressed(ctx, KeyCode::Up) {
             game_state.player_position.y -= speed;
+        }
+        if ggez::input::keyboard::is_key_pressed(ctx, KeyCode::Down) {
+            game_state.player_position.y += speed;
         }
         if ggez::input::keyboard::is_key_pressed(ctx, KeyCode::Left) {
             game_state.player_position.x -= speed;
