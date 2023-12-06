@@ -3,6 +3,8 @@
 ## Author
 Yihui T.
 
+
+## Description
 Welcome to **Mystery Box - Can You Survive 3 Out of 10**, a dystopian game developed in Rust.
 
 Are you lucky enough to choose 3 among 10 mystery boxes within one minute and still survive? 
