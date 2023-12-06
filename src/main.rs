@@ -1,18 +1,21 @@
-// main.rs
-
 use ggez::{event, ContextBuilder, GameResult};
 
 use mystery_box_can_you_survive_3_out_of_10::{handle_input, GameWindow};
 
-struct MainState {
-    game_window: GameWindow,
-    game_over: Option<GameOver>,
-}
+/// Enum representing the possible game outcomes.
 enum GameOver {
     Win,
     Lose,
 }
+
+/// The main state of the game, implementing the `EventHandler` trait.
+struct MainState {
+    game_window: GameWindow,
+    game_over: Option<GameOver>,
+}
+
 impl MainState {
+     /// Creates a new `MainState` with an initialized game window and no game over state.
     fn new(_ctx: &mut ggez::Context) -> GameResult<Self> {
         let game_window = GameWindow::new();
 
@@ -22,6 +25,7 @@ impl MainState {
         })
     }
 
+     /// Checks the game conditions to determine if the game is over and sets the `game_over` state.
     fn check_game_conditions(&mut self, _ctx: &mut ggez::Context) {
         if !self.is_game_over() {
             let game_state = &self.game_window.game_state;
@@ -41,6 +45,7 @@ impl MainState {
         }
     }
 
+    /// Returns `true` if the game is over, `false` otherwise.
     pub fn is_game_over(&self) -> bool {
         match &self.game_over {
             Some(GameOver::Win) => true,
@@ -51,6 +56,8 @@ impl MainState {
 }
 
 impl event::EventHandler<ggez::GameError> for MainState {
+    /// Updates the game state. 
+    /// If the game is not over, checks game conditions and handles input.
     fn update(&mut self, ctx: &mut ggez::Context) -> GameResult {
         if !self.is_game_over() {
             // Check game conditions
@@ -63,6 +70,7 @@ impl event::EventHandler<ggez::GameError> for MainState {
         Ok(())
     }
 
+    /// Draws the game window or displays a game over message based on the game state.
     fn draw(&mut self, ctx: &mut ggez::Context) -> GameResult {
         if self.is_game_over() {
             // If the game is over, display the corresponding message

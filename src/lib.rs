@@ -1,8 +1,18 @@
+//! ## Modules
+//!
+//! - `GameState`: Defines the game state, including player health, opened boxes, game start time, player position, and boxes.
+//! - `GameBox`: Defines the properties of a box, including position, effect, and whether it's opened or not.
+//! - `BoxEffect`: Enumerates the possible effects of opening a box, such as curing, causing injury, or having no effect.
+//! - `GameWindow`: Manages the rendering of the game window and displays player information, health bar, and boxes.
+//! - `handle_input`: Handles player input, including movement and box interactions.
+//! - `player_near_box`: Checks if the player is near a box based on simple distance calculation.
+
 use ggez::event::KeyCode;
 use mint::Point2;
 use rand::Rng;
 use std::time::Instant;
 
+/// Represents the possible effects of opening a box.
 // Define the effect of opening a box
 #[derive(Clone, Copy)]
 pub enum BoxEffect {
@@ -11,6 +21,7 @@ pub enum BoxEffect {
     NoEffect,
 }
 
+/// Represents a game box with a position, effect, and opened status.
 // Define the box struct
 #[derive(Clone)]
 pub struct GameBox {
@@ -19,6 +30,7 @@ pub struct GameBox {
     pub opened: bool,
 }
 
+/// Represents the game state, including player health, opened boxes, start time, player position, and boxes.
 // Define the game state
 #[derive(Clone)]
 pub struct GameState {
@@ -30,6 +42,7 @@ pub struct GameState {
 }
 
 impl GameState {
+    /// Creates a new game state with initialized values, including randomly placed boxes.
     pub fn new() -> Self {
         let mut rng = rand::thread_rng();
         let mut boxes = Vec::new();
@@ -81,17 +94,21 @@ impl GameState {
     }
 }
 
+/// Manages the rendering of the game window and displays player information, health bar, and boxes.
 // Define the game window
 pub struct GameWindow {
     pub game_state: GameState,
 }
 
 impl GameWindow {
+    /// Creates a new game window with an initial game state.
     pub fn new() -> Self {
         GameWindow {
             game_state: GameState::new(),
         }
     }
+
+    /// Renders the game window, including player, health bar, text, limited FOV and boxes.
     pub fn render(&self, ctx: &mut ggez::Context) -> ggez::GameResult {
         // Clear the screen
         ggez::graphics::clear(ctx, ggez::graphics::Color::from_rgb(108, 122, 137));
@@ -183,6 +200,7 @@ impl GameWindow {
     }
 }
 
+/// Handles player input, e.g. movement and opening boxes.
 pub fn handle_input(game_state: &mut GameState, ctx: &mut ggez::Context) {
     let speed = 2.0;
     // Check keyboard input
@@ -225,6 +243,7 @@ pub fn handle_input(game_state: &mut GameState, ctx: &mut ggez::Context) {
     }
 }
 
+/// Checks if the player is near a box based on the distance, used for implementing limited FOV
 fn player_near_box(player_position: &Point2<f32>, box_position: &Point2<f32>) -> bool {
     // Simple distance check for player proximity to a box
     let distance = ((player_position.x - box_position.x).powi(2)
