@@ -251,3 +251,16 @@ fn player_near_box(player_position: &Point2<f32>, box_position: &Point2<f32>) ->
     .sqrt();
     distance < 30.0 // fits current setup
 }
+
+#[test]
+fn test_player_near_box() {
+    // Test when player is near the box
+    let player_position = Point2 { x: 50.0, y: 50.0 };
+    let box_position = Point2 { x: 60.0, y: 60.0 };
+    assert!(player_near_box(&player_position, &box_position));
+
+    // Test when player is not near the box
+    let player_position = Point2 { x: 50.0, y: 50.0 };
+    let box_position = Point2 { x: 200.0, y: 200.0 };
+    assert!(!player_near_box(&player_position, &box_position));
+}

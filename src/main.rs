@@ -15,7 +15,7 @@ struct MainState {
 }
 
 impl MainState {
-     /// Creates a new `MainState` with an initialized game window and no game over state.
+    /// Creates a new `MainState` with an initialized game window and no game over state.
     fn new(_ctx: &mut ggez::Context) -> GameResult<Self> {
         let game_window = GameWindow::new();
 
@@ -25,7 +25,7 @@ impl MainState {
         })
     }
 
-     /// Checks the game conditions to determine if the game is over and sets the `game_over` state.
+    /// Checks the game conditions to determine if the game is over and sets the `game_over` state.
     fn check_game_conditions(&mut self, _ctx: &mut ggez::Context) {
         if !self.is_game_over() {
             let game_state = &self.game_window.game_state;
@@ -56,7 +56,7 @@ impl MainState {
 }
 
 impl event::EventHandler<ggez::GameError> for MainState {
-    /// Updates the game state. 
+    /// Updates the game state.
     /// If the game is not over, checks game conditions and handles input.
     fn update(&mut self, ctx: &mut ggez::Context) -> GameResult {
         if !self.is_game_over() {
