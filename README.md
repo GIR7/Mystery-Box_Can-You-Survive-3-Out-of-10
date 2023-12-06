@@ -43,4 +43,4 @@ The game successfully implements basic functionality, such as player movement, b
 I also found it is hard to have unit test in terms of the ggez game engine
 
 ## License
-
+This project is licensed under the terms of the [MIT License](https://raw.githubusercontent.com/GIR7/Mystery-Box_Can-You-Survive-3-Out-of-10/main/LICENSE).
