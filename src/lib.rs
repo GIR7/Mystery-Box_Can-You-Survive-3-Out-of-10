@@ -41,6 +41,12 @@ pub struct GameState {
     pub boxes: Vec<GameBox>,
 }
 
+impl Default for GameState {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl GameState {
     /// Creates a new game state with initialized values, including randomly placed boxes.
     pub fn new() -> Self {
@@ -98,6 +104,12 @@ impl GameState {
 // Define the game window
 pub struct GameWindow {
     pub game_state: GameState,
+}
+
+impl Default for GameWindow {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl GameWindow {
@@ -228,26 +240,24 @@ pub fn handle_input(game_state: &mut GameState, ctx: &mut ggez::Context) {
 
     // Check for box interactions
     for box_entity in &mut game_state.boxes {
-        if player_near_box(&game_state.player_position, &box_entity.position) && !box_entity.opened
+        if player_near_box(&game_state.player_position, &box_entity.position)
+            && !box_entity.opened
+            && ggez::input::keyboard::is_key_pressed(ctx, KeyCode::Space)
         {
-            if ggez::input::keyboard::is_key_pressed(ctx, KeyCode::Space) {
-                // Open the box and apply its effect to player health
-                match box_entity.effect {
-                    //prevent health below 0
-                    BoxEffect::Injury(points) => {
-                        game_state.player_health =
-                            std::cmp::max(game_state.player_health - points, 0)
-                    }
-                    // Ensure health doesn't exceed 100
-                    BoxEffect::Cure(points) => {
-                        game_state.player_health =
-                            std::cmp::min(game_state.player_health + points, 100)
-                    }
-                    BoxEffect::NoEffect => (),
+            // Open the box and apply its effect to player health
+            match box_entity.effect {
+                //prevent health below 0
+                BoxEffect::Injury(points) => {
+                    game_state.player_health = std::cmp::max(game_state.player_health - points, 0)
                 }
-                game_state.opened_boxes += 1;
-                box_entity.opened = true; // Set the opened flag to true
+                // Ensure health doesn't exceed 100
+                BoxEffect::Cure(points) => {
+                    game_state.player_health = std::cmp::min(game_state.player_health + points, 100)
+                }
+                BoxEffect::NoEffect => (),
             }
+            game_state.opened_boxes += 1;
+            box_entity.opened = true; // Set the opened flag to true
         }
     }
 }
