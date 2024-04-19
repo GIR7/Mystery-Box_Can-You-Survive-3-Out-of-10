@@ -128,7 +128,7 @@ impl GameWindow {
         ggez::graphics::draw(ctx, &player_rect, ggez::graphics::DrawParam::default())?;
 
         // Render health bar background (border)
-        let border_color = ggez::graphics::Color::BLACK; // Change to the color you want for the border
+        let border_color = ggez::graphics::Color::BLACK; // Change to the color for the border
         let health_bar_background_rect = ggez::graphics::Mesh::new_rectangle(
             ctx,
             ggez::graphics::DrawMode::stroke(2.0), // Adjust the thickness of the border
@@ -164,6 +164,15 @@ impl GameWindow {
             .dest(Point2 { x: 15.0, y: 10.0 })
             .color(ggez::graphics::Color::BLACK);
         ggez::graphics::draw(ctx, &text, text_dest)?;
+
+         // Render the game instructions
+         let instructions_text = ggez::graphics::Text::new(
+            "Use arrow keys to move\nPress SPACE to open a box when near it"
+        );
+        let instructions_dest = ggez::graphics::DrawParam::new()
+            .dest(Point2 { x: 470.0, y: 10.0 }) // instruction position
+            .color(ggez::graphics::Color::BLACK);
+        ggez::graphics::draw(ctx, &instructions_text, instructions_dest)?;
 
         // Calculate the player's field of view rectangle
         let fov_rect = ggez::graphics::Rect::new(
