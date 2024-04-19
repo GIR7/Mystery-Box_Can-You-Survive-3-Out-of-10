@@ -76,7 +76,7 @@ impl event::EventHandler<ggez::GameError> for MainState {
             // If the game is over, display the corresponding message
             if let Some(game_over) = &self.game_over {
                 let message = match game_over {
-                    GameOver::Win => "You Win!",
+                    GameOver::Win => "You opened THREE mystery boxes \nin ONE minute \nand survived \n\nYou Win!!!",
                     GameOver::Lose => "You Lose!",
                 };
 
